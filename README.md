@@ -2,42 +2,64 @@
 
 ## Project Overview
 
-The EMV Simulator is a software project designed to emulate the functionality of an EMV (Europay, MasterCard, and Visa) compliant payment terminal. This simulator aids in testing and validating payment transactions as if they were processed through a real EMV terminal.
-
-## Features
-- Simulates EMV transactions including credit and debit operations.
-- Supports various card data including chip card and contactless transactions.
-- Handles transaction authorization and cryptographic functions.
+The EMV Simulator is a small Python-based emulator and utilities for experimenting with EMV (Europay, MasterCard, and Visa) transaction flows, TLV parsing, APDU command scaffolding, and basic cryptographic helpers. This branch adds a minimal Flask-based web UI and JSON API to drive the simulator in a browser or via HTTP clients.
 
 ## Requirements
-- A compatible development environment set up with necessary libraries.
-- Basic knowledge of EMV standards and payment processing concepts.
+
+- Python 3.8+
+- Install dependencies from requirements.txt
 
 ## Installation
-1. Clone the repository:
-   ```bash
-   git clone https://github.com/DuvalC904/EMV-sim.git
-   ```
-2. Navigate to the project directory:
-   ```bash
-   cd EMV-sim
-   ```
-3. Install required dependencies:
-   ```bash
-   <dependency installation command>
-   ```
 
-## Usage
-- Run the simulator using the command:
-  ```bash
-  <command to run simulator>
-  ```
+```bash
+git clone https://github.com/DuvalC904/EMV-sim.git
+cd EMV-sim
+python -m pip install -r requirements.txt
+```
 
-## Contribution
-Contributions are welcome! Please submit a pull request for any changes you would like to propose.
+## Run the Flask demo app
 
-## License
-This project is licensed under the MIT License - see the LICENSE file for details.
+Start the development server:
 
-## Contact
-For any inquiries, please contact DuvalC904 at [your-email@example.com].
+```bash
+python web_app.py
+```
+
+The app will be available at http://127.0.0.1:5000/ — open that URL in your browser to use the tiny UI.
+
+## API endpoints
+
+- GET  /api/status — health and current transaction flow
+- POST /api/transaction/initiate  { "amount": <number> }
+- POST /api/transaction/process
+- POST /api/transaction/complete
+- GET  /api/transaction/flow
+- POST /api/example { "amount": <number>, "merchant_id": "..." } — run the example transaction flow (authorization randomly approves or declines)
+
+Example curl usage:
+
+```bash
+# initiate a transaction for 100.00
+curl -X POST -H "Content-Type: application/json" -d '{"amount":100.0}' http://127.0.0.1:5000/api/transaction/initiate
+
+# process
+curl -X POST http://127.0.0.1:5000/api/transaction/process
+
+# complete
+curl -X POST http://127.0.0.1:5000/api/transaction/complete
+
+# get flow
+curl http://127.0.0.1:5000/api/transaction/flow
+
+# run example transaction
+curl -X POST -H "Content-Type: application/json" -d '{"amount":50.0}' http://127.0.0.1:5000/api/example
+```
+
+## Notes
+
+- This server is intended for local development and experimentation only. It uses a single in-memory EMVSimulator instance that persists state while the process is running.
+- Flask is already listed in requirements.txt; no additional dependencies are required for the web UI.
+
+## Contributing
+
+If you'd like additional endpoints (reset, persistent storage, multi-session support, authentication, HTTPS), tell me which behavior you prefer and I will extend the API.
