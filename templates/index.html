@@ -1,0 +1,28 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>EMV Simulator — Web UI</title>
+  <style>
+    body { font-family: Arial, sans-serif; margin: 2rem; }
+    button { margin-right: .5rem; }
+    pre { background:#f6f8fa; padding:1rem; border-radius:6px; }
+  </style>
+</head>
+<body>
+  <h1>EMV Simulator — Web UI</h1>
+  <div>
+    <button id="btn-init">Initiate (100.0)</button>
+    <button id="btn-process">Process</button>
+    <button id="btn-complete">Complete</button>
+    <button id="btn-flow">Refresh Flow</button>
+    <button id="btn-example">Run Example Tx (random auth)</button>
+  </div>
+
+  <h2>Transaction Flow</h2>
+  <pre id="flow">(empty)</pre>
+
+  <script src="/static/main.js"></script>
+</body>
+</html>
